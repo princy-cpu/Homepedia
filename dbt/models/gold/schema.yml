@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: gold_marche_commune
+    description: Prix au m² et volumes par commune, année et type de bien
+    columns:
+      - name: code_insee
+        tests: [not_null]
+      - name: nb_ventes
+        tests: [not_null]
+    # Idée : ajouter le package dbt_utils (packages.yml + dbt deps) pour tester
+    # l'unicité de (code_insee, annee, type_local) avec unique_combination_of_columns.
+
+  - name: gold_indicateur_territoire
+    description: Indicateurs multi-niveaux en format long
+    columns:
+      - name: niveau
+        tests:
+          - accepted_values:
+              values: [commune, departement, region, france]
+      - name: valeur
+        tests: [not_null]
+
+  - name: gold_score_opportunite
+    description: Score d'opportunité et sous-scores (0-100)
+    columns:
+      - name: score
+        tests: [not_null]

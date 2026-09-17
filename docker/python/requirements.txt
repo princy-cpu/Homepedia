@@ -1,0 +1,41 @@
+# Ingestion
+requests==2.32.3
+httpx==0.27.2
+boto3==1.35.36
+pyyaml==6.0.2
+beautifulsoup4==4.12.3
+tenacity==9.0.0
+
+# Données
+pandas==2.2.3
+pyarrow==17.0.0
+polars==1.9.0
+duckdb==1.1.1
+geopandas==1.0.1
+sqlalchemy==2.0.35
+psycopg2-binary==2.9.10
+pymongo==4.10.1
+trino==0.330.0
+
+# Transformations
+dbt-core~=1.8.0
+dbt-trino~=1.8.0
+
+# App / API
+streamlit==1.39.0
+folium==0.17.0
+streamlit-folium==0.23.1
+plotly==5.24.1
+fastapi==0.115.2
+uvicorn==0.31.1
+openpyxl==3.1.5
+
+# NLP (lourd : commenter si non utilisé au début) - torch en version CPU uniquement
+--extra-index-url https://download.pytorch.org/whl/cpu
+transformers==4.45.2
+torch==2.4.1+cpu
+sentencepiece==0.2.0
+
+# Tests / notebooks
+pytest==8.3.3
+jupyterlab==4.2.5

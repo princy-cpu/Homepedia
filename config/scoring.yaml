@@ -1,0 +1,77 @@
+# Homepedia : score "Acheter, vendre ou attendre ?"
+# Deux axes (0-100) : potentiel de marché et risque de décote à 2040.
+# Les poids de chaque axe somment à 1. L'app part de ces valeurs (curseurs).
+
+axes:
+  potentiel:
+    sous_scores:
+      dynamique:
+        - {indicateur: evol_prix_m2_1an, sens: 1}
+        - {indicateur: evol_prix_m2_5ans, sens: 1}
+        - {indicateur: ventes_pour_1000_logements, sens: 1}   # liquidité
+      demande:
+        - {indicateur: evol_population_5ans, sens: 1}
+        - {indicateur: taux_chomage, sens: -1}
+        - {indicateur: revenu_median, sens: 1}
+        - {indicateur: logements_autorises_pour_1000_hab, sens: 1}
+      attractivite:
+        - {indicateur: equipements_pour_1000_hab, sens: 1}
+        - {indicateur: acces_gare, sens: 1}
+        - {indicateur: creations_entreprises_pour_1000_hab, sens: 1}
+        - {indicateur: sentiment_avis, sens: 1}
+      accessibilite:
+        - {indicateur: annees_revenu_pour_70m2, sens: -1}
+
+  risque_2040:            # plus c'est haut, plus le risque de décote est fort
+    sous_scores:
+      energetique:
+        - {indicateur: part_dpe_fg, sens: 1}
+        - {indicateur: part_dpe_e, sens: 1}
+        - {indicateur: part_ventes_fg, sens: 1}
+        - {indicateur: decote_dpe_g_locale, sens: 1}           # valeur absolue de la décote
+      climat_actuel:
+        - {indicateur: nb_catnat_10ans, sens: 1}
+        - {indicateur: part_bati_argiles_fort, sens: 1}
+        - {indicateur: zone_inondable_ppr, sens: 1}
+        - {indicateur: littoral_expose, sens: 1}
+      climat_projete:
+        - {indicateur: jours_35c_tracc27, sens: 1}
+        - {indicateur: secheresse_sols_tracc27, sens: 1}
+        - {indicateur: pluies_extremes_tracc27, sens: 1}
+
+profils:
+  acheteur_investisseur:
+    label: "Acheteur investisseur / marchand de biens"
+    poids_potentiel: {dynamique: 0.40, demande: 0.25, attractivite: 0.20, accessibilite: 0.15}
+    poids_risque: {energetique: 0.40, climat_actuel: 0.35, climat_projete: 0.25}
+  agence:
+    label: "Agence immobilière"
+    poids_potentiel: {dynamique: 0.45, demande: 0.20, attractivite: 0.20, accessibilite: 0.15}
+    poids_risque: {energetique: 0.50, climat_actuel: 0.30, climat_projete: 0.20}
+  banque_assureur:
+    label: "Banque / assureur"
+    poids_potentiel: {dynamique: 0.30, demande: 0.30, attractivite: 0.15, accessibilite: 0.25}
+    poids_risque: {energetique: 0.30, climat_actuel: 0.35, climat_projete: 0.35}
+
+# Seuils de la matrice de décision (en rang percentile)
+quadrants:
+  seuil_potentiel: 50
+  seuil_risque: 50
+  libelles:
+    potentiel_haut_risque_bas: "Valeurs sûres"
+    potentiel_haut_risque_haut: "Opportunités sous conditions"
+    potentiel_bas_risque_bas: "Marchés stables"
+    potentiel_bas_risque_haut: "Zones de décote"
+
+# Scénario "valeur à risque 2040" (hypothèses modifiables dans l'app)
+scenario_2040:
+  niveau_rechauffement_tracc: 2.7        # °C (TRACC : +2 en 2030, +2,7 en 2050)
+  decote_dpe_reference:                   # repli si le modèle local manque de données
+    source: "Notaires de France, données 2024 (publication 15/12/2025), réf. classe D"
+    maison: {G: -0.25}
+    appartement: {G: -0.12}
+  facteur_calendrier_location: {G: 1.0, F: 1.0, E: 0.6}   # interdictions : G 2025, F 2028, E 2034
+
+nlp:
+  themes: [transports, sécurité, commerces, écoles, bruit, propreté, espaces verts, prix du logement, chaleur, inondation]
+  mots_surveilles: [inondation, inondé, humidité, moisissure, fissure, chaleur, canicule, sécheresse, bruit, rats, calme, verdure]

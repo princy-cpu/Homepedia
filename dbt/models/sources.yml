@@ -1,0 +1,21 @@
+version: 2
+
+sources:
+  - name: silver
+    database: iceberg
+    schema: silver
+    description: Tables nettoyées par les jobs Spark (bronze -> silver)
+    tables:
+      - name: dvf_mutations
+        description: Ventes DVF mono-logement nettoyées (voir docs/04_nettoyage.md)
+        columns:
+          - name: id_mutation
+            tests: [not_null, unique]
+          - name: code_insee
+            tests: [not_null]
+      - name: ref_commune
+        description: Référentiel des communes (API Geo), avec population
+      - name: loyers
+      - name: socio_eco
+      - name: concurrence
+      - name: risques

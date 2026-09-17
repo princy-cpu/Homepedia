@@ -1,0 +1,28 @@
+# Secrets
+.env
+
+# Données locales et caches
+data/
+*.parquet
+*.csv.gz
+.cache/
+spark-warehouse/
+metastore_db/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# dbt
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

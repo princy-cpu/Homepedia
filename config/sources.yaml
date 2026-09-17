@@ -1,0 +1,222 @@
+# Catalogue des sources, lu par src/homepedia/ingestion/download.py
+# type : http (fichier), api (appel paginé, à implémenter), scrape (voir scrape_avis.py)
+# priorite : P0 socle, P1 cœur (MVP), P2 enrichissement, P3 optionnel
+#   (voir docs/02b_priorisation_sources.md)
+# Les URL de fichiers data.gouv changent parfois : si une URL casse, récupérer
+# la nouvelle depuis la page "page" du jeu de données.
+
+sources:
+  dvf:
+    priorite: P0
+    label: Demandes de valeurs foncières géolocalisées
+    producer: DGFiP / Etalab
+    page: https://www.data.gouv.fr/datasets/demandes-de-valeurs-foncieres-geolocalisees
+    type: http
+    # Un fichier par année ; adapter la liste aux millésimes disponibles
+    url_template: https://files.data.gouv.fr/geo-dvf/latest/csv/{year}/full.csv.gz
+    years: [2021, 2022, 2023, 2024, 2025]
+    format: csv.gz
+    level: mutation
+
+  loyers:
+    priorite: P3
+    optional: true   # hors cœur du sujet (achat/vente)
+    label: Carte des loyers (indicateurs par commune)
+    producer: Ministère du Logement / ANIL
+    page: https://www.data.gouv.fr/datasets/carte-des-loyers-indicateurs-de-loyers-dannonce-par-commune-en-2025
+    type: http
+    urls: []   # TODO : coller les URL des CSV (appartements, maisons) de chaque millésime
+    format: csv
+    level: commune
+
+  filosofi:
+    priorite: P1
+    label: Revenus et pauvreté des ménages (Filosofi 2021)
+    producer: INSEE
+    page: https://www.insee.fr/fr/statistiques/zones/7758831
+    type: http
+    urls: []
+    format: zip
+    level: commune
+
+  population_historique:
+    priorite: P2
+    label: Historique des populations communales
+    producer: INSEE
+    page: https://www.insee.fr/fr/statistiques/3698339
+    type: http
+    urls: []
+    format: xlsx
+    level: commune
+
+  dossier_complet:
+    priorite: P1
+    label: Base du dossier complet
+    producer: INSEE
+    page: https://www.insee.fr/fr/statistiques/5359146
+    type: http
+    urls: []
+    format: zip
+    level: commune
+
+  bpe:
+    priorite: P2
+    label: Base permanente des équipements
+    producer: INSEE
+    page: https://www.insee.fr/fr/statistiques/8217537
+    type: http
+    urls: []
+    format: zip
+    level: equipement
+
+  sirene:
+    priorite: P3
+    label: SIRENE établissements géolocalisés
+    producer: INSEE
+    page: https://www.data.gouv.fr/datasets/base-sirene-des-etablissements-2024-geolocalisee-geoparquet
+    type: http
+    urls: []
+    format: parquet
+    level: etablissement
+
+  sitadel:
+    priorite: P2
+    label: Logements autorisés et commencés (séries communales)
+    producer: SDES
+    page: https://www.data.gouv.fr/datasets/logements-autorises-et-commences-series-mensuelles-communales-en-date-de-prise-en-compte
+    type: http
+    urls: []
+    format: csv
+    level: commune
+
+  delinquance:
+    priorite: P3
+    optional: true
+    label: Délinquance enregistrée (base communale)
+    producer: SSMSI
+    page: https://www.data.gouv.fr/datasets/bases-statistiques-communale-departementale-et-regionale-de-la-delinquance-enregistree-par-la-police-et-la-gendarmerie-nationales
+    type: http
+    urls: []
+    format: csv.gz
+    level: commune
+
+  georisques:
+    priorite: P1
+    label: Géorisques (CatNat, risques par commune)
+    producer: MTE
+    page: https://www.georisques.gouv.fr/doc-api
+    type: api
+    base_url: https://georisques.gouv.fr/api/v1
+    endpoints: [gaspar/catnat, gaspar/risques]
+    level: commune
+
+  dpe:
+    priorite: P1
+    label: DPE logements existants
+    producer: ADEME
+    page: https://data.ademe.fr/datasets/dpe03existant
+    type: http
+    urls: []
+    format: csv
+    level: logement
+
+  gares:
+    priorite: P2
+    label: Fréquentation en gares
+    producer: SNCF
+    page: https://www.data.gouv.fr/datasets/frequentation-en-gares
+    type: http
+    urls: []
+    format: csv
+    level: gare
+
+  contours:
+    priorite: P0
+    label: Admin Express COG (contours communes / départements / régions)
+    producer: IGN
+    page: https://www.data.gouv.fr/datasets/communes-cantons-et-epci-2025-admin-express-cog-plus-ign
+    type: http
+    urls: []
+    format: 7z
+    level: commune
+
+  api_geo:
+    priorite: P0
+    label: API Découpage administratif
+    producer: DINUM
+    page: https://api.gouv.fr/les-api/api-geo
+    type: http
+    urls:
+      - https://geo.api.gouv.fr/communes?fields=code,nom,codeDepartement,codeRegion,population,codesPostaux&format=json
+      - https://geo.api.gouv.fr/departements?fields=code,nom,codeRegion&format=json
+      - https://geo.api.gouv.fr/regions?fields=code,nom&format=json
+    format: json
+    level: commune
+
+  bdnb:
+    priorite: P1
+    label: Base de données nationale des bâtiments (pont DVF <-> DPE)
+    producer: CSTB
+    page: https://bdnb.io/download/
+    type: http
+    urls: []   # TODO : un export CSV par département (commencer par DEV_DEPARTEMENTS)
+    format: zip
+    level: batiment
+
+  ban:
+    priorite: P3
+    label: Base Adresse Nationale
+    producer: IGN / DINUM
+    page: https://adresse.data.gouv.fr/ressources-et-documentations
+    type: http
+    urls: []   # TODO : adresses-<dep>.csv.gz pour les départements étudiés
+    format: csv.gz
+    level: adresse
+
+  argiles_2026:
+    priorite: P1
+    label: Exposition au retrait-gonflement des argiles (en vigueur au 01/07/2026)
+    producer: BRGM / Géorisques
+    page: https://www.data.gouv.fr/datasets/donnees-dexposition-au-retrait-gonflement-des-argiles-en-vigueur-a-partir-du-01-07-2026-1
+    type: http
+    urls: []
+    format: zip
+    level: zone
+
+  trait_de_cote:
+    priorite: P2
+    label: Recul du trait de côte
+    producer: Cerema / GéoLittoral
+    page: https://www.data.gouv.fr/datasets/recul-evenementiel-du-trait-de-cote-1
+    type: http
+    urls: []
+    format: zip
+    level: lineaire
+
+  onrn_sinistralite:
+    priorite: P2
+    label: Indicateurs de sinistralité CatNat (ONRN)
+    producer: ONRN
+    page: https://www.georisques.gouv.fr/articles-risques/onrn/acceder-aux-indicateurs-sinistralite
+    type: http
+    urls: []
+    format: csv
+    level: commune
+
+  drias_tracc:
+    priorite: P2
+    label: Indicateurs climatiques par niveau de réchauffement TRACC
+    producer: Météo-France (DRIAS)
+    page: https://www.drias-climat.fr/accompagnement/sections/409
+    type: http
+    urls: []   # téléchargement après création d'un compte DRIAS (gratuit)
+    format: csv
+    level: grille_8km
+
+  avis:
+    priorite: P1
+    label: Avis d'habitants (source textuelle)
+    producer: ville-ideale.fr / bien-dans-ma-ville.fr
+    page: https://www.ville-ideale.fr/
+    type: scrape
+    level: commune

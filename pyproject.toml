@@ -1,0 +1,13 @@
+[project]
+name = "homepedia"
+version = "0.1.0"
+description = "Plateforme d'analyse du marché immobilier français (EPITECH)"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 110
+src = ["src"]

@@ -1,0 +1,14 @@
+# Utilisé dans le conteneur "tools" (DBT_PROFILES_DIR=/opt/homepedia/dbt)
+homepedia:
+  target: dev
+  outputs:
+    dev:
+      type: trino
+      method: none
+      user: dbt
+      host: trino
+      port: 8080
+      database: iceberg      # catalogue Trino
+      schema: gold
+      threads: 2
+      http_scheme: http
