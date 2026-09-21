@@ -14,7 +14,7 @@ sources:
     type: http
     # Un fichier par année ; adapter la liste aux millésimes disponibles
     url_template: https://files.data.gouv.fr/geo-dvf/latest/csv/{year}/full.csv.gz
-    years: [2021, 2022, 2023, 2024, 2025]
+    years: [2025]  # T1.3 : une seule année pour le jour 1, remettre les 5 années en T2.2
     format: csv.gz
     level: mutation
 
